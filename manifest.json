@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Quick Notes",
-  "version": "1.0",
-  "description": "Save quick notes easily",
+  "name": "NoteFlow – Smart Chrome Notes",
+  "version": "2.0",
+  "description": "Modern note-taking extension with search and sync",
   "action": {
     "default_popup": "popup.html"
   },
