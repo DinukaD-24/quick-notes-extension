@@ -1,3 +1,7 @@
+*, *::before, *::after {
+  box-sizing: border-box; /* prevents padding from overflowing width: 100% */
+}
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #1e1e2f;

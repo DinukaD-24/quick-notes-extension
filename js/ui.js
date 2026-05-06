@@ -5,20 +5,29 @@ export function renderNotes(notes, container, onDelete) {
     const div = document.createElement("div");
     div.className = "note";
 
-    div.innerHTML = `
-      <div>${note.text}</div>
-      <small>${note.date}</small>
-      <div class="actions">
-        <button data-id="${note.id}" class="delete">Delete</button>
-      </div>
-    `;
+    // Safely build DOM — never inject user text into innerHTML (XSS prevention)
+    const textDiv = document.createElement("div");
+    textDiv.textContent = note.text;
+
+    const small = document.createElement("small");
+    small.textContent = note.date;
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.className = "delete";
+    deleteBtn.dataset.id = note.id;
+    deleteBtn.addEventListener("click", () => {
+      onDelete(note.id);
+    });
+
+    actions.appendChild(deleteBtn);
+    div.appendChild(textDiv);
+    div.appendChild(small);
+    div.appendChild(actions);
 
     container.appendChild(div);
-  });
-
-  container.querySelectorAll(".delete").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      onDelete(parseInt(e.target.dataset.id));
-    });
   });
 }
