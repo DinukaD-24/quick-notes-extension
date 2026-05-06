@@ -1,16 +1,18 @@
-# 📝 NoteFlow — Quick Notes Chrome Extension
+# 📝 NoteFlow – Smart Chrome Notes
 
-A lightweight Chrome browser extension that lets you jot down, save, and search notes directly from your browser toolbar — no account, no internet connection required.
+A modern, lightweight Chrome browser extension for quick note-taking — directly from your browser toolbar. Supports multiple notes, real-time search, and persistent local storage. No account or internet connection required.
 
 ---
 
 ## ✨ Features
 
-- **Quick note-taking** — Write notes instantly from the browser popup
-- **Add multiple notes** — Organize your thoughts with multiple note entries
-- **Search notes** — Filter through your notes in real time using the search bar
-- **Persistent storage** — Notes are saved using Chrome's local storage, so they survive browser restarts
-- **Minimal & fast** — No backend, no login, just notes
+- **Quick note-taking** — Write and add notes instantly from the browser popup
+- **Multiple notes** — Store as many notes as you need, each with a timestamp
+- **Real-time search** — Filter notes as you type — search persists even when deleting
+- **Delete notes** — Remove individual notes with one click
+- **Persistent storage** — Notes survive browser restarts using Chrome's local storage (10MB capacity)
+- **XSS-safe** — User input is never injected as raw HTML
+- **Minimal & fast** — No backend, no login, no dependencies
 
 ---
 
@@ -40,13 +42,14 @@ A lightweight Chrome browser extension that lets you jot down, save, and search 
 
 ```
 quick-notes-extension/
-├── manifest.json     # Chrome extension configuration (Manifest V3)
-├── popup.html        # Extension popup UI
-├── popup.js          # Core logic — save & load notes via Chrome storage
+├── manifest.json        # Chrome extension config (Manifest V3)
+├── popup.html           # Extension popup UI
 ├── css/
-│   └── style.css     # Styles for the popup UI
+│   └── style.css        # Dark-themed popup styles
 └── js/
-    └── app.js        # Additional app logic (modular)
+    ├── app.js           # Main entry — note logic, search, delete
+    ├── storage.js       # Chrome local storage read/write helpers
+    └── ui.js            # DOM rendering — builds note cards safely
 ```
 
 ---
@@ -56,26 +59,47 @@ quick-notes-extension/
 | Technology | Purpose |
 |------------|---------|
 | HTML | Popup interface structure |
-| CSS | Styling the extension popup |
-| JavaScript | Note logic and Chrome API interaction |
-| Chrome Storage API | Persistent local note storage |
+| CSS | Dark-themed styling with responsive layout |
+| JavaScript (ES Modules) | Modular note logic and Chrome API interaction |
+| Chrome Storage API (`local`) | Persistent local note storage (10MB limit) |
 | Manifest V3 | Latest Chrome extension standard |
+
+---
+
+## 🔒 Security
+
+- All user note text is rendered using `textContent` — **never `innerHTML`** — preventing XSS attacks
+- Notes are stored only on the user's device via `chrome.storage.local`
+- No external requests, no analytics, no tracking
 
 ---
 
 ## 📌 Permissions
 
-This extension only requests the `storage` permission — used solely to save your notes locally on your device. No data is sent anywhere.
+| Permission | Reason |
+|------------|--------|
+| `storage` | Save and retrieve notes locally on your device |
+
+No data is sent anywhere. Everything stays on your machine.
+
+---
+
+## 🐛 Bug Fixes (v2.0)
+
+- **Storage quota fix** — Switched from `chrome.storage.sync` (8KB limit) to `chrome.storage.local` (10MB limit) with error handling
+- **XSS fix** — Replaced raw `innerHTML` injection with safe DOM construction using `textContent`
+- **Search-delete fix** — Deleting a note while searching no longer resets the search filter
+- **CSS overflow fix** — Added `box-sizing: border-box` globally to prevent inputs from overflowing the 300px popup
 
 ---
 
 ## 🔮 Future Improvements
 
-- [ ] Edit and delete individual notes
+- [ ] Edit existing notes inline
 - [ ] Export notes as `.txt` or `.md`
-- [ ] Dark mode support
-- [ ] Note timestamps
-- [ ] Keyboard shortcuts
+- [ ] Dark / light mode toggle
+- [ ] Pin important notes to the top
+- [ ] Keyboard shortcut to open popup
 
 ---
 
